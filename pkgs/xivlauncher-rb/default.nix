@@ -84,4 +84,6 @@ in
       platforms = [ "x86_64-linux" ];
       mainProgram = "XIVLauncher.Core";
     };
+
+    preferLocalBuild = true;
   }
