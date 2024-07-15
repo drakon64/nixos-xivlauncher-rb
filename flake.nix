@@ -1,5 +1,5 @@
 {
-  description = "Cross-platform version of XIVLauncher, optimized for Steam Deck";
+  description = "Custom launcher for FFXIV";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   outputs = { self, nixpkgs }:
     let
