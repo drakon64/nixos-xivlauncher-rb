@@ -1,6 +1,8 @@
 { lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
 , copyDesktopItems, makeDesktopItem, makeWrapper
-, useSteamRun ? true }:
+, useSteamRun ? true
+, useGameMode ? false
+}:
 
 let
   tag = "1.1.0.6";
@@ -45,7 +47,10 @@ in
 
     postFixup = lib.optionalString useSteamRun (let
       steam-run = (steam.override {
-        extraPkgs = pkgs: [ pkgs.libunwind pkgs.zstd ];
+        extraPkgs = pkgs: [
+          pkgs.libunwind
+          pkgs.zstd
+        ] ++ lib.optional useGameMode pkgs.gamemode;
         extraProfile = ''
           unset TZ
         '';
