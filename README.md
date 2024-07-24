@@ -1,6 +1,6 @@
 # nixos-xivlauncher-rb
 
-XIVLauncher-RB for NixOS.
+[XIVLauncher-RB](https://github.com/rankynbass/XIVLauncher.Core) for NixOS.
 
 ## Installation
 
@@ -34,7 +34,7 @@ The following `flake.nix` can be used for installing XIVLauncher-RB:
 }
 ```
 
-With optional GameMode support:
+With optional [GameMode](https://github.com/FeralInteractive/gamemode) support:
 
 ```nix
 {
