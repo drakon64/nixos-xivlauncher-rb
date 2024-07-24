@@ -69,4 +69,4 @@ With optional [GameMode](https://github.com/FeralInteractive/gamemode) support:
 ## Credits
 
 * [nur-packages-template](https://github.com/nix-community/nur-packages-template) for providing the template for a Nix Flake
-* [sersorrel](https://github.com/sersorrel) and [witchof0x20](https://github.com/witchof0x20) for maintaining the [XIVLauncher package in Nixpkgs](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/xi/xivlauncher) which this heavily borrows from
+* [sersorrel](https://github.com/sersorrel) and [witchof0x20](https://github.com/witchof0x20) for maintaining the [XIVLauncher package in Nixpkgs](https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/xi/xivlauncher) which this heavily borrows from
