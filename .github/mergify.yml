@@ -5,6 +5,8 @@ pull_request_rules:
         - author=dependabot[bot]
         - author=github-actions[bot]
       - label=dependencies
+
+      - check-success=Build
     actions:
       merge:
         method: squash
