@@ -1,11 +1,6 @@
 name: Flake
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - flake.nix
   schedule:
     - cron: '0 11 * * *'
   workflow_dispatch:
