@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.nix"
+      - flake.lock
+      - .github/workflows/*.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.nix"
+      - flake.lock
+      - .github/workflows/*.yml
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@v12
+
+      - run: nix build
