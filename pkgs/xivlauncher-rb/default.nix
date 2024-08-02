@@ -1,9 +1,26 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret
-, glib, gnutls, aria2, steam, gst_all_1, copyDesktopItems, makeDesktopItem
-, makeWrapper, useSteamRun ? true, useGameMode ? false }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  SDL2,
+  libsecret,
+  glib,
+  gnutls,
+  aria2,
+  steam,
+  gst_all_1,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  useSteamRun ? true,
+  useGameMode ? false,
+}:
 
-let tag = "1.1.0.6";
-in buildDotnetModule rec {
+let
+  tag = "1.1.0.6";
+in
+buildDotnetModule rec {
   pname = "xivlauncher-rb";
   version = tag;
 
@@ -15,7 +32,10 @@ in buildDotnetModule rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   buildInputs = with gst_all_1; [
     gstreamer
@@ -27,14 +47,16 @@ in buildDotnetModule rec {
   ];
 
   projectFile = "src/XIVLauncher.Core/XIVLauncher.Core.csproj";
-  nugetDeps =
-    ./deps.nix; # File generated with `nix-build -A xivlauncher-rb.passthru.fetch-deps`
+  nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher-rb.passthru.fetch-deps`
 
   # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  dotnetFlags = [ "-p:BuildHash=${tag}" "-p:PublishSingleFile=false" ];
+  dotnetFlags = [
+    "-p:BuildHash=${tag}"
+    "-p:PublishSingleFile=false"
+  ];
 
   postPatch = ''
     substituteInPlace lib/FFXIVQuickLauncher/src/XIVLauncher.Common/Game/Patch/Acquisition/Aria/AriaHttpPatchAcquisition.cs \
@@ -46,27 +68,43 @@ in buildDotnetModule rec {
     cp src/XIVLauncher.Core/Resources/logo.png $out/share/pixmaps/xivlauncher.png
   '';
 
-  postFixup = lib.optionalString useSteamRun (let
-    steam-run = (steam.override {
-      extraPkgs = pkgs:
-        [ pkgs.libunwind pkgs.zstd ] ++ lib.optional useGameMode pkgs.gamemode;
-      extraProfile = ''
-        unset TZ
-      '';
-    }).run;
-  in ''
-    substituteInPlace $out/bin/XIVLauncher.Core \
-      --replace 'exec' 'exec ${steam-run}/bin/steam-run'
-  '') + ''
-    wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
-    # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065
-    mkdir -p $out/nix-support
-    echo ${aria2} >> $out/nix-support/depends
-  '';
+  postFixup =
+    lib.optionalString useSteamRun (
+      let
+        steam-run =
+          (steam.override {
+            extraPkgs =
+              pkgs:
+              [
+                pkgs.libunwind
+                pkgs.zstd
+              ]
+              ++ lib.optional useGameMode pkgs.gamemode;
+            extraProfile = ''
+              unset TZ
+            '';
+          }).run;
+      in
+      ''
+        substituteInPlace $out/bin/XIVLauncher.Core \
+          --replace 'exec' 'exec ${steam-run}/bin/steam-run'
+      ''
+    )
+    + ''
+      wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065
+      mkdir -p $out/nix-support
+      echo ${aria2} >> $out/nix-support/depends
+    '';
 
   executables = [ "XIVLauncher.Core" ];
 
-  runtimeDeps = [ SDL2 libsecret glib gnutls ];
+  runtimeDeps = [
+    SDL2
+    libsecret
+    glib
+    gnutls
+  ];
 
   desktopItems = [
     (makeDesktopItem {
