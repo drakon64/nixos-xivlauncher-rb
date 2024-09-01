@@ -11,6 +11,9 @@
       };
     in
     {
-      packages.${system}.default = pkgs.callPackage ./pkgs/xivlauncher-rb { };
+      packages.${system} = rec {
+        xivlauncher-rb = pkgs.callPackage ./pkgs/xivlauncher-rb { };
+        default = xivlauncher-rb;
+      };
     };
 }
