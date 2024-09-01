@@ -60,11 +60,21 @@ environment.systemPackages = [
 ];
 ```
 
-Alternatively, with optional [GameMode](https://github.com/FeralInteractive/gamemode) support:
+### Overrides
+
+#### GameMode
 
 ```nix
 environment.systemPackages = [
   (inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default.override { useGameMode = true; })
+];
+```
+
+#### DLSS
+
+```nix
+environment.systemPackages = [
+  (inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default.override { nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine"; })
 ];
 ```
 
