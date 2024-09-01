@@ -22,53 +22,50 @@ Then run `sudo nixos-rebuilt test`, then create a `flake.nix` file in your NixOS
     };
   };
 
-  outputs = { self, nixpkgs, nixos-xivlauncher-rb }: {
+  outputs = inputs@{
+    self,
+    nixpkgs,
+    nixos-xivlauncher-rb
+  }:
+  {
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
         modules = [
-          {
-            environment.systemPackages = [
-              nixos-xivlauncher-rb.packages.x86_64-linux.xivlauncher-rb
-            ];
-          }
           ./configuration.nix
         ];
+        
+        specialArgs = {
+          inherit inputs;
+        };
       };
     };
   };
 }
 ```
 
-Alternatively, with optional [GameMode](https://github.com/FeralInteractive/gamemode) support:
+Then you can add `xivlauncher-rb` to `configuration.nix` like so:
 
 ```nix
 {
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05"; # This should match the version of NixOS you want to use
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+...
 
-    nixos-xivlauncher-rb = {
-      url = "github:drakon64/nixos-xivlauncher-rb";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+environment.systemPackages = [
+  inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default
+];
+```
 
-  outputs = { self, nixpkgs, nixos-xivlauncher-rb }: {
-    nixosConfigurations = {
-      desktop = nixpkgs.lib.nixosSystem {
-        modules = [
-          {
-            environment.systemPackages = [
-              (nixos-xivlauncher-rb.packages.x86_64-linux.xivlauncher-rb.override {
-                useGameMode = true;
-              })
-            ];
-          }
-          ./configuration.nix
-        ];
-      };
-    };
-  };
-}
+Alternatively, with optional [GameMode](https://github.com/FeralInteractive/gamemode) support:
+
+```nix
+environment.systemPackages = [
+  (inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default.override { useGameMode = true; })
+];
 ```
 
 Now run `sudo nix flake update` in your NixOS configuration directory and rebuild your system as normal. Please note that the previous method of updating Nix channels will no longer work, you will have to use `sudo nix flake update` as long as Flakes are enabled.
