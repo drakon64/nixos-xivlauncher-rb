@@ -25,7 +25,6 @@ Then run `sudo nixos-rebuilt test`, then create a `flake.nix` file in your NixOS
   outputs = inputs@{
     self,
     nixpkgs,
-    nixos-xivlauncher-rb
   }:
   {
     nixosConfigurations = {
