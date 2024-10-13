@@ -19,7 +19,7 @@
 }:
 
 let
-  tag = "1.1.0.14";
+  tag = "1.1.0.15";
 in
 buildDotnetModule rec {
   pname = "xivlauncher-rb";
@@ -29,7 +29,7 @@ buildDotnetModule rec {
     owner = "rankynbass";
     repo = "XIVLauncher.Core";
     rev = "rb-v${tag}";
-    hash = "sha256-0YcuCVAPw6Ar4mwS6P8yujHMmj/LIDHLxfy4oy7Tq4w=";
+    hash = "sha256-lTJoZ/ltDZu3DLkniu10+EfDjaCCMLUZwPIOaHR7JbI=";
     fetchSubmodules = true;
   };
 
