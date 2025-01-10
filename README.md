@@ -22,21 +22,22 @@ Then run `sudo nixos-rebuilt test`, then create a `flake.nix` file in your NixOS
     };
   };
 
-  outputs = inputs@{
-    self,
-    nixpkgs,
-    nixos-xivlauncher-rb,
-  }:
-  {
-    nixosConfigurations = {
-      desktop = nixpkgs.lib.nixosSystem {
-        modules = [
-          ./configuration.nix
-          nixos-xivlauncher-rb.nixosModules.default
-        ];
+  outputs =
+   {
+      self,
+      nixpkgs,
+      nixos-xivlauncher-rb,
+    }:
+    {
+      nixosConfigurations = {
+        desktop = nixpkgs.lib.nixosSystem {
+          modules = [
+            ./configuration.nix
+            nixos-xivlauncher-rb.nixosModules.default
+          ];
+        };
       };
     };
-  };
 }
 ```
 
