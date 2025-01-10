@@ -25,17 +25,15 @@ Then run `sudo nixos-rebuilt test`, then create a `flake.nix` file in your NixOS
   outputs = inputs@{
     self,
     nixpkgs,
+    nixos-xivlauncher-rb,
   }:
   {
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
         modules = [
           ./configuration.nix
+          nixos-xivlauncher-rb.nixosModules.default
         ];
-        
-        specialArgs = {
-          inherit inputs;
-        };
       };
     };
   };
@@ -49,31 +47,39 @@ Then you can add `xivlauncher-rb` to `configuration.nix` like so:
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 ...
 
 environment.systemPackages = [
-  inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default
+  xivlauncher-rb
 ];
 ```
 
-### Overrides
-
-#### GameMode
+Optionally you can enable GameMode support:
 
 ```nix
 environment.systemPackages = [
-  (inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default.override { useGameMode = true; })
+  (xivlauncher-rb.override { useGameMode = true; })
 ];
 ```
 
-#### DLSS
+or DLSS support:
 
 ```nix
 environment.systemPackages = [
-  (inputs.nixos-xivlauncher-rb.packages.x86_64-linux.default.override { nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine"; })
+  (xivlauncher-rb.override { nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine"; })
+];
+```
+
+or both:
+
+```nix
+environment.systemPackages = [
+  (xivlauncher-rb.override {
+    useGameMode = true;
+    nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";
+  })
 ];
 ```
 
@@ -81,5 +87,6 @@ Now run `sudo nix flake update` in your NixOS configuration directory and rebuil
 
 ## Credits
 
-* [nur-packages-template](https://github.com/nix-community/nur-packages-template) for providing the template for a Nix Flake
+* [nur-packages-template](https://github.com/nix-community/nur-packages-template) for providing the original template for a Nix Flake
 * [sersorrel](https://github.com/sersorrel) and [witchof0x20](https://github.com/witchof0x20) for maintaining the [XIVLauncher package in Nixpkgs](https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/xi/xivlauncher) which this heavily borrows from
+* [niklaskorz](https://github.com/niklaskorz) for showing me how to properly package something with Nix
