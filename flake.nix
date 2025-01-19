@@ -13,7 +13,7 @@
     in
     {
       packages.${system} = rec {
-        xivlauncher-rb = pkgs.callPackage ./pkgs/xivlauncher-rb { };
+        xivlauncher-rb = pkgs.callPackage ./xivlauncher-rb { };
         default = xivlauncher-rb;
       };
 
