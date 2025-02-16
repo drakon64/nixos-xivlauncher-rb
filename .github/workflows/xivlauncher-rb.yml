@@ -21,8 +21,6 @@ jobs:
           source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
           diagnostic-endpoint: ""
 
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-
       - name: Configure git
         run: |
           git config user.name 'github-actions[bot]'
