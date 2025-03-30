@@ -26,6 +26,10 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
+      - run: |
+          mkdir -p ~/.config/nixpkgs
+          echo "{ allowUnfree = true; }" > ~/.config/nixpkgs/config.nix
+
       - run: nix run github:Mic92/nix-update -- xivlauncher-rb --flake --commit --version-regex 'rb-v(.*)'
 
       - id: create-pr
